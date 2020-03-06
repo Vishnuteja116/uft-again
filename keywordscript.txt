@@ -1,0 +1,44 @@
+datatable.AddSheet("Testcase")
+datatable.AddSheet("Teststep")
+
+datatable.ImportSheet "C:\Users\syntel\Desktop\keywordscript.xls",1,"Testcase"
+datatable.ImportSheet "C:\Users\syntel\Desktop\keywordscript.xls",2,"Teststep"
+
+itestcase=datatable.GetSheet("Testcase").GetRowCount
+
+For  i = 1 To itestcase
+
+datatable.GetSheet("Testcase").SetCurrentRow(i)
+
+If datatable.value("execute","Testcase")="yes"  Then
+	
+	testcaseid=datatable.getsheet("Testcase").getParameter("Testcaseid")
+	iteststep=datatable.GetSheet("Teststep").GetRowCount
+	
+	For j=   1 To iteststep
+	
+	datatable.GetSheet("Teststep").SetCurrentRow(j)
+	
+	If datatable.GetSheet("Teststep").GetParameter("Testcaseid")=testcaseid Then
+		selection=datatable.value("Keyword","Teststep")
+		
+		Select Case selection
+			case"startapp"
+			status =startapp()
+			Case "Login"
+			status=Login()
+			Case "reserve"
+			status=reserve()
+			Case else
+			msgbox ("no match")
+			datatable.value("result","Testcase")=status
+		End Select
+		datatable.value("result","Testcase")=status
+		End If
+		
+	Next
+	End If
+	
+	Next
+	
+	

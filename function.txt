@@ -1,0 +1,52 @@
+Function startapp()
+	Systemutil.Run "C:\Program Files (x86)\HP\Unified Functional Testing\samples\flight\app\flight4a.exe"
+	status=Dialog("text:=Login").GetROProperty("enabled")
+	If status=True Then
+		msgbox ("success")
+		else
+		msgbox ("failed")
+	End If
+	
+	msgbox status 
+	startapp=status
+	
+End Function
+
+Function Login()
+	
+	Dialog("text:=Login").Activate
+	Dialog("text:=Login").WinEdit("attached text:=Agent Name:").Set "aaaa"
+	Dialog("text:=Login").WinEdit("attached text:=Password:").SetSecure "mercury"
+	Dialog("text:=Login").WinButton("text:=OK").Click
+	
+	status =Window("text:=Flight Reservation").GetROProperty("text")
+	
+	
+	If status="Flight Reservation" Then
+		msgbox ("success")
+		else
+		msgbox ("failed")
+	End If
+	msgbox status
+	Login=status
+End Function
+
+Function reserve()
+	Window("text:=Flight Reservation").Activate
+	Window("text:=Flight Reservation").ActiveX("acx_name:=MaskEdBox").Type"121219"
+	Window("text:=Flight Reservation").WinComboBox("attached text:=Fly From:").Select"London"
+	Window("text:=Flight Reservation").WinComboBox("attached text:=Fly To:").Select"Paris"
+	Window("text:=Flight Reservation").WinButton("text:=FLIGHT").Click
+	Window("text:=Flight Reservation").Dialog("text:=Flights Table").WinButton("text:=OK").Click
+	Window("text:=Flight Reservation").WinEdit("attached text:=Name:","height:=20").Set"aaaa"
+	Window("text:=Flight Reservation").WinButton("text:=&Insert Order").Click
+	wait(6)
+	status =Window("text:=Flight Reservation").WinButton("text:=&Insert Order").GetROProperty("enabled")
+	If status=false Then
+		msgbox "success"
+		else
+		msgbox "failed"
+	End If
+	reserve=status
+	Window("text:=Flight Reservation").Close
+End Function
